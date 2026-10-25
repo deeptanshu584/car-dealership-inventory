@@ -39,4 +39,7 @@ export class PrismaVehicleRepository implements IVehicleRepository {
     const result = await this.prisma.vehicle.updateMany({ where: { id, quantity: { gte: quantity } }, data: { quantity: { decrement: quantity } } });
     return result.count === 1;
   }
+  increment(id: string, quantity: number): Promise<VehicleRecord> {
+    return this.prisma.vehicle.update({ where: { id }, data: { quantity: { increment: quantity } } });
+  }
 }

@@ -18,3 +18,4 @@ export const searchQuerySchema = listQuerySchema.extend({
 }).refine(query => query.minPrice === undefined || query.maxPrice === undefined || query.minPrice <= query.maxPrice, 'minPrice must be at most maxPrice');
 export const vehicleUpdateSchema = vehicleCreateSchema.partial().refine(value => Object.keys(value).length > 0, 'At least one field is required');
 export const purchaseSchema = z.object({ quantity: z.number().int().positive().default(1) });
+export const restockSchema = z.object({ quantity: z.number().int().positive() });

@@ -41,4 +41,8 @@ export class VehicleService {
     if (!vehicle) throw new NotFoundError('Vehicle not found');
     return toVehicleDto(vehicle);
   }
+  async restock(id: string, quantity: number) {
+    if (!(await this.vehicles.findById(id))) throw new NotFoundError('Vehicle not found');
+    return toVehicleDto(await this.vehicles.increment(id, quantity));
+  }
 }
