@@ -12,4 +12,8 @@ export class VehicleService {
     const vehicle = await this.vehicles.create({ make: input.make, model: input.model, category: input.category, priceCents: Math.round(input.price * 100), quantity: input.quantity });
     return toVehicleDto(vehicle);
   }
+  async list(page: number, limit: number) {
+    const result = await this.vehicles.list(page, limit);
+    return { data: result.data.map(toVehicleDto), page, limit, total: result.total };
+  }
 }
