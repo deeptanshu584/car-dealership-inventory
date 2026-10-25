@@ -1,4 +1,4 @@
-import type { IVehicleRepository, VehicleRecord } from '../repositories/IVehicleRepository';
+import type { IVehicleRepository, VehicleRecord, VehicleSearchCriteria } from '../repositories/IVehicleRepository';
 
 export interface VehicleInput { make: string; model: string; category: string; price: number; quantity: number; }
 
@@ -15,5 +15,9 @@ export class VehicleService {
   async list(page: number, limit: number) {
     const result = await this.vehicles.list(page, limit);
     return { data: result.data.map(toVehicleDto), page, limit, total: result.total };
+  }
+  async search(criteria: VehicleSearchCriteria) {
+    const result = await this.vehicles.search(criteria);
+    return { data: result.data.map(toVehicleDto), page: criteria.page, limit: criteria.limit, total: result.total };
   }
 }

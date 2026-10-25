@@ -9,3 +9,10 @@ export const vehicleCreateSchema = z.object({
   quantity: z.number().int().nonnegative(),
 });
 export const listQuerySchema = z.object({ page: z.coerce.number().int().positive().default(1), limit: z.coerce.number().int().positive().max(100).default(12) });
+export const searchQuerySchema = listQuerySchema.extend({
+  make: z.string().trim().optional(),
+  model: z.string().trim().optional(),
+  category: z.preprocess(value => typeof value === 'string' ? value.toUpperCase() : value, z.enum(categories).optional()),
+  minPrice: z.coerce.number().nonnegative().optional(),
+  maxPrice: z.coerce.number().nonnegative().optional(),
+}).refine(query => query.minPrice === undefined || query.maxPrice === undefined || query.minPrice <= query.maxPrice, 'minPrice must be at most maxPrice');
