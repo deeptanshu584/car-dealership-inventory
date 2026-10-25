@@ -2,15 +2,42 @@
 
 A full stack inventory application for dealership staff and shoppers. Users can register, search a live vehicle catalog, and purchase available stock. Admins can add, edit, delete, and restock vehicles. The API persists data in SQLite and prevents simultaneous purchases from overselling the final unit.
 
-**Live demo:** Not deployed. TODO (human): add the public repository and deployed URL if you publish them.
+**Repository:** https://github.com/deeptanshu584/car-dealership-inventory  
+**Live demo:** Not deployed (local execution).
 
 ## Screenshots
 
-![Login](docs/screenshots/login.png)
-![Dashboard](docs/screenshots/dashboard.png)
-![Search and filters](docs/screenshots/search.png)
-![Admin panel](docs/screenshots/admin.png)
-![Mobile view](docs/screenshots/mobile.png)
+### Customer Portal & Authentication
+
+#### User Sign In
+![User Sign In](docs/screenshots/login.png)
+
+#### New User Registration
+![User Registration](docs/screenshots/register.png)
+
+### Showroom Inventory & Purchasing
+
+#### Live Vehicle Inventory Dashboard
+![Live Vehicle Inventory Dashboard](docs/screenshots/dashboard.png)
+
+#### Real-Time Vehicle Search and Filtering
+![Vehicle Search and Filtering](docs/screenshots/search.png)
+
+#### Vehicle Purchase Interaction and Live Feedback
+![Vehicle Purchase and Live Feedback](docs/screenshots/purchase.png)
+
+### Administrator Management Console
+
+#### Vehicle Inventory Management & Restock Controls
+![Administrator Inventory Management](docs/screenshots/admin.png)
+
+#### Add Vehicle Specification Modal
+![Add Vehicle Specification Modal](docs/screenshots/admin-modal.png)
+
+### Responsive Experience
+
+#### Mobile Viewport (390 × 844)
+![Mobile Showroom Experience](docs/screenshots/mobile.png)
 
 ## Tech stack
 
@@ -43,7 +70,7 @@ The design follows SOLID: services and repositories have separate responsibiliti
 
 ### Prerequisites
 
-Node.js 20 or newer, npm 10 or newer, and Git. This workspace has no remote URL yet. TODO (human): create a public repository and add its link here.
+Node.js 20 or newer, npm 10 or newer, and Git. Repository: https://github.com/deeptanshu584/car-dealership-inventory.
 
 ### 1. Backend
 
@@ -153,7 +180,7 @@ The original pasted plan and raw prompts are recorded in [PROMPTS.md](PROMPTS.md
 
 ## Known limitations and future work
 
-- No deployment or public Git remote was provided. Add both for submission.
+- The application is configured for local execution; live cloud deployment is optional.
 - The admin page currently loads the first 100 vehicles; server pagination is available but admin pagination is not implemented.
 - Sessions expire after one hour and have no refresh flow.
 - The initial setup commit has a malformed co-author trailer body, and the history has fewer commits than the implementation plan's 80–150 target. Preserve this history; never squash before pushing.

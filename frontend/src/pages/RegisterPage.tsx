@@ -11,6 +11,7 @@ export function RegisterPage() {
   const [confirm, setConfirm] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+
   async function submit(event: FormEvent) {
     event.preventDefault();
     if (password !== confirm) return setError('Passwords do not match');
@@ -31,32 +32,48 @@ export function RegisterPage() {
       setBusy(false);
     }
   }
+
   const inputClass =
-    'mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-teal focus:ring-2 focus:ring-teal/30';
+    'mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-ink transition-colors placeholder:text-slate-400 focus:border-teal focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal/20';
+
   return (
-    <main className="min-h-screen bg-mist flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-xl shadow-ink/10">
-        <p className="text-sm font-bold uppercase tracking-[0.2em] text-teal">
-          Motorhouse
-        </p>
-        <h1 className="mt-3 text-3xl font-bold text-ink">
+    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-900 via-ink to-ink-deep px-4 py-12">
+      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white p-8 shadow-2xl sm:p-10">
+        <div className="mb-6 flex items-center gap-3">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal text-lg font-black text-white shadow-sm ring-1 ring-white/20">
+            M
+          </span>
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-teal">
+              Motorhouse
+            </p>
+            <p className="text-[11px] font-medium text-slate-400">
+              Inventory Portal
+            </p>
+          </div>
+        </div>
+
+        <h1 className="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">
           Create your account
         </h1>
-        <p className="mt-2 text-slate-600">
-          Find your next car in a few clicks.
+        <p className="mt-2 text-sm text-slate-600">
+          Find and purchase your next vehicle in minutes.
         </p>
-        <form onSubmit={submit} className="mt-8 space-y-4">
-          <label className="block text-sm font-semibold text-ink">
+
+        <form onSubmit={submit} className="mt-7 space-y-3.5">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
             Name
             <input
               required
               value={name}
               onChange={(event) => setName(event.target.value)}
               autoComplete="name"
+              placeholder="Alex Morgan"
               className={inputClass}
             />
           </label>
-          <label className="block text-sm font-semibold text-ink">
+
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
             Email
             <input
               required
@@ -64,10 +81,12 @@ export function RegisterPage() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               autoComplete="email"
+              placeholder="alex@example.com"
               className={inputClass}
             />
           </label>
-          <label className="block text-sm font-semibold text-ink">
+
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
             Password
             <input
               required
@@ -75,10 +94,12 @@ export function RegisterPage() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               autoComplete="new-password"
+              placeholder="••••••••"
               className={inputClass}
             />
           </label>
-          <label className="block text-sm font-semibold text-ink">
+
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
             Confirm password
             <input
               required
@@ -86,27 +107,34 @@ export function RegisterPage() {
               value={confirm}
               onChange={(event) => setConfirm(event.target.value)}
               autoComplete="new-password"
+              placeholder="••••••••"
               className={inputClass}
             />
           </label>
+
           {error && (
             <p
               role="alert"
-              className="rounded-lg bg-red-50 p-3 text-sm text-red-700"
+              className="rounded-xl border border-red-200 bg-red-50 p-3.5 text-xs font-semibold text-red-700"
             >
               {error}
             </p>
           )}
+
           <button
             disabled={busy}
-            className="w-full rounded-xl bg-teal px-4 py-3 font-semibold text-white transition hover:bg-teal/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal disabled:opacity-60"
+            className="mt-2 w-full rounded-xl bg-teal px-4 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-teal-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal disabled:opacity-60"
           >
             {busy ? 'Creating account…' : 'Create account'}
           </button>
         </form>
-        <p className="mt-6 text-center text-sm text-slate-600">
+
+        <p className="mt-7 border-t border-slate-100 pt-5 text-center text-xs text-slate-600">
           Already registered?{' '}
-          <Link className="font-semibold text-teal hover:underline" to="/login">
+          <Link
+            className="font-bold text-teal underline-offset-4 hover:underline"
+            to="/login"
+          >
             Sign in
           </Link>
         </p>
