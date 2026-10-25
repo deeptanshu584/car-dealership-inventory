@@ -1,4 +1,4 @@
-import { NotFoundError } from '../errors/AppError';
+import { ConflictError, NotFoundError } from '../errors/AppError';
 import type { IVehicleRepository, VehicleRecord, VehicleSearchCriteria } from '../repositories/IVehicleRepository';
 
 export interface VehicleInput { make: string; model: string; category: string; price: number; quantity: number; }
@@ -30,5 +30,15 @@ export class VehicleService {
   async delete(id: string): Promise<void> {
     if (!(await this.vehicles.findById(id))) throw new NotFoundError('Vehicle not found');
     await this.vehicles.delete(id);
+  }
+  async purchase(id: string, quantity: number) {
+    const succeeded = await this.vehicles.decrementIfAvailable(id, quantity);
+    if (!succeeded) {
+      if (!(await this.vehicles.findById(id))) throw new NotFoundError('Vehicle not found');
+      throw new ConflictError('Insufficient stock');
+    }
+    const vehicle = await this.vehicles.findById(id);
+    if (!vehicle) throw new NotFoundError('Vehicle not found');
+    return toVehicleDto(vehicle);
   }
 }

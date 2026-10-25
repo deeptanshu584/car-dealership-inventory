@@ -4,7 +4,7 @@ import { authenticate } from '../middleware/authenticate';
 import { requireRole } from '../middleware/requireRole';
 import { validateBody } from '../middleware/validate';
 import { validateQuery } from '../middleware/validateQuery';
-import { listQuerySchema, searchQuerySchema, vehicleCreateSchema, vehicleUpdateSchema } from '../schemas/vehicle.schemas';
+import { listQuerySchema, purchaseSchema, searchQuerySchema, vehicleCreateSchema, vehicleUpdateSchema } from '../schemas/vehicle.schemas';
 import type { VehicleService } from '../services/VehicleService';
 
 export function vehicleRoutes(vehicles: VehicleService, secret: string): Router {
@@ -16,5 +16,6 @@ export function vehicleRoutes(vehicles: VehicleService, secret: string): Router 
   router.get('/', validateQuery(listQuerySchema), controller.list);
   router.put('/:id', validateBody(vehicleUpdateSchema), controller.update);
   router.delete('/:id', requireRole('ADMIN'), controller.delete);
+  router.post('/:id/purchase', validateBody(purchaseSchema), controller.purchase);
   return router;
 }

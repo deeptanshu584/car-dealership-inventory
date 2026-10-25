@@ -35,4 +35,8 @@ export class PrismaVehicleRepository implements IVehicleRepository {
   async delete(id: string): Promise<void> {
     await this.prisma.vehicle.delete({ where: { id } });
   }
+  async decrementIfAvailable(id: string, quantity: number): Promise<boolean> {
+    const result = await this.prisma.vehicle.updateMany({ where: { id, quantity: { gte: quantity } }, data: { quantity: { decrement: quantity } } });
+    return result.count === 1;
+  }
 }
