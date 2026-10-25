@@ -1,3 +1,4 @@
+import { NotFoundError } from '../errors/AppError';
 import type { IVehicleRepository, VehicleRecord, VehicleSearchCriteria } from '../repositories/IVehicleRepository';
 
 export interface VehicleInput { make: string; model: string; category: string; price: number; quantity: number; }
@@ -19,5 +20,11 @@ export class VehicleService {
   async search(criteria: VehicleSearchCriteria) {
     const result = await this.vehicles.search(criteria);
     return { data: result.data.map(toVehicleDto), page: criteria.page, limit: criteria.limit, total: result.total };
+  }
+  async update(id: string, input: Partial<VehicleInput>) {
+    if (!(await this.vehicles.findById(id))) throw new NotFoundError('Vehicle not found');
+    const { price, ...rest } = input;
+    const vehicle = await this.vehicles.update(id, { ...rest, ...(price === undefined ? {} : { priceCents: Math.round(price * 100) }) });
+    return toVehicleDto(vehicle);
   }
 }

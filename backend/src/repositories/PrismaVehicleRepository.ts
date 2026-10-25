@@ -1,5 +1,5 @@
 import type { Prisma, PrismaClient } from '@prisma/client';
-import type { CreateVehicleRecord, IVehicleRepository, VehiclePage, VehicleRecord, VehicleSearchCriteria } from './IVehicleRepository';
+import type { CreateVehicleRecord, IVehicleRepository, VehiclePage, VehicleRecord, VehicleSearchCriteria, UpdateVehicleRecord } from './IVehicleRepository';
 
 export class PrismaVehicleRepository implements IVehicleRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -25,5 +25,11 @@ export class PrismaVehicleRepository implements IVehicleRepository {
       this.prisma.vehicle.findMany({ where, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], skip: (criteria.page - 1) * criteria.limit, take: criteria.limit }),
     ]);
     return { total, data };
+  }
+  findById(id: string): Promise<VehicleRecord | null> {
+    return this.prisma.vehicle.findUnique({ where: { id } });
+  }
+  update(id: string, data: UpdateVehicleRecord): Promise<VehicleRecord> {
+    return this.prisma.vehicle.update({ where: { id }, data });
   }
 }
