@@ -2,6 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { closeSync, openSync } from 'node:fs';
 
 process.env.DATABASE_URL = 'file:./test.db';
+process.env.JWT_SECRET = 'test-only-secret';
 closeSync(openSync(new URL('../prisma/test.db', import.meta.url), 'a'));
 const runner = process.platform === 'win32' ? 'npx.cmd' : 'npx';
 execFileSync(runner, ['prisma', 'migrate', 'deploy'], { stdio: 'inherit', env: process.env, shell: process.platform === 'win32' });

@@ -1,6 +1,8 @@
 import express, { type Express } from 'express';
+import { createContainer } from './container';
 import { NotFoundError } from './errors/AppError';
 import { errorHandler } from './middleware/errorHandler';
+import { authRoutes } from './routes/auth.routes';
 
 export function createApp(): Express {
   const app = express();
@@ -8,6 +10,8 @@ export function createApp(): Express {
   app.get('/api/health', (_request, response) => {
     response.json({ status: 'ok' });
   });
+  const container = createContainer();
+  app.use('/api/auth', authRoutes(container.auth));
   app.use((_request, _response, next) => next(new NotFoundError('Route not found')));
   app.use(errorHandler);
   return app;
