@@ -32,4 +32,7 @@ export class PrismaVehicleRepository implements IVehicleRepository {
   update(id: string, data: UpdateVehicleRecord): Promise<VehicleRecord> {
     return this.prisma.vehicle.update({ where: { id }, data });
   }
+  async delete(id: string): Promise<void> {
+    await this.prisma.vehicle.delete({ where: { id } });
+  }
 }

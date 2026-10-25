@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express';
 import type { VehicleService } from '../services/VehicleService';
 
-export function vehicleController(vehicles: VehicleService): { create: RequestHandler; list: RequestHandler; search: RequestHandler; update: RequestHandler } {
+export function vehicleController(vehicles: VehicleService): { create: RequestHandler; list: RequestHandler; search: RequestHandler; update: RequestHandler; delete: RequestHandler } {
   return {
     create: (request, response, next) => {
       vehicles.create(request.body).then(vehicle => response.status(201).json(vehicle)).catch(next);
@@ -15,6 +15,9 @@ export function vehicleController(vehicles: VehicleService): { create: RequestHa
     },
     update: (request, response, next) => {
       vehicles.update(request.params.id, request.body).then(vehicle => response.json(vehicle)).catch(next);
+    },
+    delete: (request, response, next) => {
+      vehicles.delete(request.params.id).then(() => response.status(204).send()).catch(next);
     },
   };
 }

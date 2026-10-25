@@ -27,4 +27,8 @@ export class VehicleService {
     const vehicle = await this.vehicles.update(id, { ...rest, ...(price === undefined ? {} : { priceCents: Math.round(price * 100) }) });
     return toVehicleDto(vehicle);
   }
+  async delete(id: string): Promise<void> {
+    if (!(await this.vehicles.findById(id))) throw new NotFoundError('Vehicle not found');
+    await this.vehicles.delete(id);
+  }
 }
