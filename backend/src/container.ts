@@ -10,5 +10,10 @@ export function createContainer() {
   const prisma = new PrismaClient();
   const users = new PrismaUserRepository(prisma);
   const vehicles = new PrismaVehicleRepository(prisma);
-  return { prisma, auth: new AuthService(users, env.jwtSecret), vehicles: new VehicleService(vehicles), env };
+  return {
+    prisma,
+    auth: new AuthService(users, env.jwtSecret),
+    vehicles: new VehicleService(vehicles),
+    env,
+  };
 }

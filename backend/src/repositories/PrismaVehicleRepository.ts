@@ -1,5 +1,12 @@
 import type { Prisma, PrismaClient } from '@prisma/client';
-import type { CreateVehicleRecord, IVehicleRepository, VehiclePage, VehicleRecord, VehicleSearchCriteria, UpdateVehicleRecord } from './IVehicleRepository';
+import type {
+  CreateVehicleRecord,
+  IVehicleRepository,
+  VehiclePage,
+  VehicleRecord,
+  VehicleSearchCriteria,
+  UpdateVehicleRecord,
+} from './IVehicleRepository';
 
 export class PrismaVehicleRepository implements IVehicleRepository {
   constructor(private readonly prisma: PrismaClient) {}
@@ -9,7 +16,11 @@ export class PrismaVehicleRepository implements IVehicleRepository {
   async list(page: number, limit: number): Promise<VehiclePage> {
     const [total, data] = await this.prisma.$transaction([
       this.prisma.vehicle.count(),
-      this.prisma.vehicle.findMany({ orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], skip: (page - 1) * limit, take: limit }),
+      this.prisma.vehicle.findMany({
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
     ]);
     return { total, data };
   }
@@ -18,11 +29,27 @@ export class PrismaVehicleRepository implements IVehicleRepository {
       ...(criteria.make ? { make: { contains: criteria.make } } : {}),
       ...(criteria.model ? { model: { contains: criteria.model } } : {}),
       ...(criteria.category ? { category: criteria.category } : {}),
-      ...(criteria.minPrice !== undefined || criteria.maxPrice !== undefined ? { priceCents: { ...(criteria.minPrice !== undefined ? { gte: Math.round(criteria.minPrice * 100) } : {}), ...(criteria.maxPrice !== undefined ? { lte: Math.round(criteria.maxPrice * 100) } : {}) } } : {}),
+      ...(criteria.minPrice !== undefined || criteria.maxPrice !== undefined
+        ? {
+            priceCents: {
+              ...(criteria.minPrice !== undefined
+                ? { gte: Math.round(criteria.minPrice * 100) }
+                : {}),
+              ...(criteria.maxPrice !== undefined
+                ? { lte: Math.round(criteria.maxPrice * 100) }
+                : {}),
+            },
+          }
+        : {}),
     };
     const [total, data] = await this.prisma.$transaction([
       this.prisma.vehicle.count({ where }),
-      this.prisma.vehicle.findMany({ where, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], skip: (criteria.page - 1) * criteria.limit, take: criteria.limit }),
+      this.prisma.vehicle.findMany({
+        where,
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        skip: (criteria.page - 1) * criteria.limit,
+        take: criteria.limit,
+      }),
     ]);
     return { total, data };
   }
@@ -36,10 +63,16 @@ export class PrismaVehicleRepository implements IVehicleRepository {
     await this.prisma.vehicle.delete({ where: { id } });
   }
   async decrementIfAvailable(id: string, quantity: number): Promise<boolean> {
-    const result = await this.prisma.vehicle.updateMany({ where: { id, quantity: { gte: quantity } }, data: { quantity: { decrement: quantity } } });
+    const result = await this.prisma.vehicle.updateMany({
+      where: { id, quantity: { gte: quantity } },
+      data: { quantity: { decrement: quantity } },
+    });
     return result.count === 1;
   }
   increment(id: string, quantity: number): Promise<VehicleRecord> {
-    return this.prisma.vehicle.update({ where: { id }, data: { quantity: { increment: quantity } } });
+    return this.prisma.vehicle.update({
+      where: { id },
+      data: { quantity: { increment: quantity } },
+    });
   }
 }

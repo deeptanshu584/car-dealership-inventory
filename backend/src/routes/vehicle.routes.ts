@@ -4,10 +4,20 @@ import { authenticate } from '../middleware/authenticate';
 import { requireRole } from '../middleware/requireRole';
 import { validateBody } from '../middleware/validate';
 import { validateQuery } from '../middleware/validateQuery';
-import { listQuerySchema, purchaseSchema, restockSchema, searchQuerySchema, vehicleCreateSchema, vehicleUpdateSchema } from '../schemas/vehicle.schemas';
+import {
+  listQuerySchema,
+  purchaseSchema,
+  restockSchema,
+  searchQuerySchema,
+  vehicleCreateSchema,
+  vehicleUpdateSchema,
+} from '../schemas/vehicle.schemas';
 import type { VehicleService } from '../services/VehicleService';
 
-export function vehicleRoutes(vehicles: VehicleService, secret: string): Router {
+export function vehicleRoutes(
+  vehicles: VehicleService,
+  secret: string,
+): Router {
   const router = Router();
   const controller = vehicleController(vehicles);
   router.use(authenticate(secret));
@@ -16,7 +26,16 @@ export function vehicleRoutes(vehicles: VehicleService, secret: string): Router 
   router.get('/', validateQuery(listQuerySchema), controller.list);
   router.put('/:id', validateBody(vehicleUpdateSchema), controller.update);
   router.delete('/:id', requireRole('ADMIN'), controller.delete);
-  router.post('/:id/purchase', validateBody(purchaseSchema), controller.purchase);
-  router.post('/:id/restock', requireRole('ADMIN'), validateBody(restockSchema), controller.restock);
+  router.post(
+    '/:id/purchase',
+    validateBody(purchaseSchema),
+    controller.purchase,
+  );
+  router.post(
+    '/:id/restock',
+    requireRole('ADMIN'),
+    validateBody(restockSchema),
+    controller.restock,
+  );
   return router;
 }

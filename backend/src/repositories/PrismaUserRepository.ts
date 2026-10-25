@@ -9,7 +9,9 @@ export class PrismaUserRepository implements IUserRepository {
     return row ? { ...row, role: row.role as UserRecord['role'] } : null;
   }
 
-  async create(data: Omit<UserRecord, 'id' | 'createdAt'>): Promise<UserRecord> {
+  async create(
+    data: Omit<UserRecord, 'id' | 'createdAt'>,
+  ): Promise<UserRecord> {
     const row = await this.prisma.user.create({ data });
     return { ...row, role: row.role as UserRecord['role'] };
   }

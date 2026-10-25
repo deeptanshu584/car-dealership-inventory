@@ -17,9 +17,23 @@ export function createApp(): Express {
   app.get('/api/health', (_request, response) => {
     response.json({ status: 'ok' });
   });
-  app.use('/api/auth', rateLimit({ windowMs: 15 * 60 * 1000, limit: 5, handler: (_request, _response, next) => next(new AppError(429, 'RATE_LIMITED', 'Too many requests')) }), authRoutes(container.auth));
-  app.use('/api/vehicles', vehicleRoutes(container.vehicles, container.env.jwtSecret));
-  app.use((_request, _response, next) => next(new NotFoundError('Route not found')));
+  app.use(
+    '/api/auth',
+    rateLimit({
+      windowMs: 15 * 60 * 1000,
+      limit: 5,
+      handler: (_request, _response, next) =>
+        next(new AppError(429, 'RATE_LIMITED', 'Too many requests')),
+    }),
+    authRoutes(container.auth),
+  );
+  app.use(
+    '/api/vehicles',
+    vehicleRoutes(container.vehicles, container.env.jwtSecret),
+  );
+  app.use((_request, _response, next) =>
+    next(new NotFoundError('Route not found')),
+  );
   app.use(errorHandler);
   return app;
 }

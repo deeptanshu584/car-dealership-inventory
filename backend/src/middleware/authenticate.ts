@@ -8,7 +8,12 @@ export function authenticate(secret: string): RequestHandler {
     if (!match) return next(new UnauthorizedError('Authentication required'));
     try {
       const payload = jwt.verify(match[1], secret);
-      if (typeof payload === 'string' || !payload.sub || (payload.role !== 'USER' && payload.role !== 'ADMIN')) throw new Error('Invalid payload');
+      if (
+        typeof payload === 'string' ||
+        !payload.sub ||
+        (payload.role !== 'USER' && payload.role !== 'ADMIN')
+      )
+        throw new Error('Invalid payload');
       request.auth = { userId: payload.sub, role: payload.role };
       next();
     } catch {
